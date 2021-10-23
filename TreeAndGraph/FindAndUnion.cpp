@@ -42,7 +42,7 @@ void Union(int* parent, int x, int y)
 
 bool IsCyclic(Graph* g)
 {
-    int *parent = new int[g->V, sizeof(int)];
+    int *parent = new int[g->V];
     std::memset(parent, -1, g->V * sizeof(int));
     
     for (int i = 0; i < g->E; i++)
