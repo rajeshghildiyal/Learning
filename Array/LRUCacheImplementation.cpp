@@ -1,6 +1,3 @@
-/******************************************************************************
-
-Welcome to GDB Online.
 #include <stdio.h>
 #include <list>
 #include <unordered_map>
@@ -26,22 +23,16 @@ public:
         if (itr != m_stringMap.end())
         {
             m_cache.erase(itr->second);
-            m_cache.push_front(str);
-            m_stringMap[str] = m_cache.begin();
         }
-        else
+        else if (m_cache.size() == m_numOfStrings)
         {
-            // String not present and cache is full, evict LRU string.
-            if (m_cache.size() == m_numOfStrings)
-            {
-                auto itr = m_cache.back();
-                m_cache.pop_back();
-                m_stringMap.erase(itr);
-            }
-            
-            m_cache.push_front(str);
-            m_stringMap[str] = m_cache.begin();
+            auto itr = m_cache.back();
+            m_cache.pop_back();
+            m_stringMap.erase(itr);
         }
+        
+        m_cache.push_front(str);
+        m_stringMap[str] = m_cache.begin();
     }
     
     void DisplayCache()
@@ -54,7 +45,6 @@ public:
         cout << endl;
     }
 };
-
 
 int main()
 {
