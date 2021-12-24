@@ -1,40 +1,51 @@
 #include <stdio.h>
+#include <map>
 #include <vector>
+#include <set>
+#include <limits.h>
 #include <iostream>
 using namespace std;
 
+bool AllDestVisited(map<int, int>& destMap, set<int>& dests)
+{
+    for (auto e : dests)
+    {
+        if (destMap.find(e) == destMap.end())
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
 int main()
 {
-    vector<int> A = {2,1,1,3,2,1,4,3,1,2};
-    vector<int> destIndexCounter(A.size(), 0);
+    vector<int> A = {2,1,1,3,3,4,2,1,2,1,2,2,3,4};
+    map<int, int> destMap;
+    int minDays = INT_MAX;
+    int startIndex = 0;
+    set <int> dests;
     
-    if (A.size() <= 1)
+    for (auto item : A)
     {
-        return A.size();
+        dests.insert(item - 1);
     }
-    
-    int startDayIndex = 0;
-    int endDayIndex = 0;
     
     for (int i = 0; i < A.size(); i++)
     {
-        destIndexCounter[A[i] - 1]++;
+        destMap[A[i] - 1]++;
         
-        if (A[i] == A[i-1])
+        while (destMap[A[startIndex] - 1] > 1)
         {
-            continue;
+            destMap[A[startIndex] - 1]--;
+            ++startIndex;
         }
         
-        endDayIndex = i;
-        
-        while (destIndexCounter[A[startDayIndex] - 1] > 1)
+        if (AllDestVisited(destMap, dests))
         {
-            destIndexCounter[A[startDayIndex] - 1]--;
-            startDayIndex++;
+            minDays = min(minDays, i - startIndex + 1);
         }
     }
-    
-    cout << "Min days = " << endDayIndex - startDayIndex + 1;
-
-    return 0;
+    cout << "Min days = " << minDays;
+    return minDays;
 }
